@@ -12,7 +12,7 @@ const register = catchAsync(async (req, res, next) => {
   const userdata = { ...req.body, password: pass };
   user = await User.create(userdata);
   const token = jwt.sign({ token: user._id }, process.env.JWT_SECRETE);
-  res.send({ data: user, result: true, message: 'User created', token });
+  res.send({ user, result: true, message: 'User created', token });
 });
 
 const login = catchAsync(async (req, res, next) => {
@@ -26,7 +26,7 @@ const login = catchAsync(async (req, res, next) => {
   if (!pass) throw new AppError(401, 'Incorrect Mobile Number or Password');
   return res
     .status(200)
-    .json({ message: 'loggedin successful', token, result: true });
+    .json({ message: 'Logging successful', user, token, result: true });
 });
 
 const auth = catchAsync(async (req, res, next) => {
