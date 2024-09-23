@@ -54,4 +54,25 @@ const profile = catchAsync(async (req, res, next) => {
   });
 });
 
-module.exports = { profile };
+const addCourse = catchAsync(async (req, res, next) => {
+  if (!req.user) throw new AppError(404, 'Invalid User ID');
+  const course = req.body.course;
+  if (!course) throw new AppError(401, 'Invalid course ID');
+  const courses = [...req.user.courses, course];
+  console.log(course, req.user._id);
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    { courses },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+  res.status(200).json({
+    message: 'Course Purchase Successful',
+    user: user,
+    result: true,
+  });
+});
+
+module.exports = { profile, addCourse };

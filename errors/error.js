@@ -16,7 +16,7 @@ function undefinedRoute(req, res, next) {
 function catchAsync(fun) {
   return async (req, res, next) =>
     await fun(req, res, next).catch(err => {
-      console.error(err.message);
+      console.error(err);
       next(err);
     });
 }

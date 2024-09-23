@@ -19,7 +19,8 @@ const login = catchAsync(async (req, res, next) => {
   const { mobile, password } = req.body;
   if (!mobile || !password)
     throw new AppError(402, 'Email and Password required');
-  let user = await User.findOne({ mobile });
+  let user =
+    (await User.findOne({ mobile })) || (await User.findOne({ email: mobile }));
   if (!user) throw new AppError(401, 'Incorrect Mobile Number or Password');
   const pass = await bcrypt.compare(password, user.password);
   const token = jwt.sign({ token: user._id }, process.env.JWT_SECRETE);
